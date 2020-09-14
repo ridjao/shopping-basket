@@ -1,0 +1,45 @@
+plugins {
+	id 'java'
+	id 'groovy'
+	id 'jacoco'
+}
+
+repositories {
+	jcenter()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web:2.3.2.RELEASE'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.3.2.RELEASE'
+	implementation 'com.h2database:h2:1.4.200'
+}
+
+jar {
+	archiveFileName= 'shopping-basket.jar'
+	destinationDirectory= file("${buildDir}")
+	manifest {
+		attributes(
+			'Class-Path': configurations.runtimeClasspath.files.collect { 'dependency-jars/' + it.getName() }.join(' '),
+			'Main-Class': 'com.clfops.shop.ShoppingBasketService'
+		)
+	}
+}
+
+task copyToLib(type: Copy) {
+	into "${buildDir}/dependency-jars"
+	from configurations.runtimeClasspath
+}
+
+test {
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.enabled true
+	}
+}
+
+build.dependsOn(copyToLib)
