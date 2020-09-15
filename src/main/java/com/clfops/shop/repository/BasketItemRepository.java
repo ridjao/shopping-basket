@@ -1,5 +1,7 @@
 package com.clfops.shop.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -13,5 +15,8 @@ public interface BasketItemRepository extends CrudRepository<BasketItem, Integer
 	@Modifying
 	@Query("DELETE FROM BasketItem bi WHERE bi.basket = :basket") 
     void deleteBasketItemsByBasketId(@Param("basket") Basket basket);
+	
+	@Query("SELECT bi FROM BasketItem bi WHERE bi.basket = :basket") 
+    List<BasketItem> getBasketItemsByBasketId(@Param("basket") Basket basket);
 }
 

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,7 @@ import com.clfops.shop.repository.BasketItem;
 import com.clfops.shop.repository.BasketItemRepository;
 import com.clfops.shop.repository.BasketRepository;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(path="/api/v1/baskets")
 public class ShoppingBasketController {
@@ -66,7 +68,7 @@ public class ShoppingBasketController {
 		}
 	
 		ShoppingBasketResponse response = new ShoppingBasketResponse("OK");
-		response.setItems(getCurrentBasketItems());
+		response.setItems(getCurrentBasketItems(basket));
 		return response;
 	}
 	
@@ -99,7 +101,7 @@ public class ShoppingBasketController {
 		}
 		
 		ShoppingBasketResponse response = new ShoppingBasketResponse("OK");
-		response.setItems(getCurrentBasketItems());
+		response.setItems(getCurrentBasketItems(basket));
 		return response;
 	}
 	
@@ -112,13 +114,13 @@ public class ShoppingBasketController {
 		}
 		
 		ShoppingBasketResponse response = new ShoppingBasketResponse("OK");
-		response.setItems(getCurrentBasketItems());
+		response.setItems(getCurrentBasketItems(basket));
 		return response;
 	}
 	
-	private List<Item> getCurrentBasketItems() {
+	private List<Item> getCurrentBasketItems(Basket basket) {
 		List<Item> currentItems = new ArrayList<>();
-		for (BasketItem basketItem : basketItemRepository.findAll()) {
+		for (BasketItem basketItem : basketItemRepository.getBasketItemsByBasketId(basket)) {
 			currentItems.add(new Item(basketItem.getId(), basketItem.getProductName(),
 					basketItem.getCount(), basketItem.getUnitPrice()));
 		}
