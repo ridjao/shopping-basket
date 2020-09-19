@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class BasketItem {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
 	@ManyToOne(fetch=FetchType.LAZY)

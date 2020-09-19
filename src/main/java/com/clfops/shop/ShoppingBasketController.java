@@ -87,7 +87,7 @@ public class ShoppingBasketController {
 				try {
 					basketItemRepository.deleteById(basketItemId);
 				} catch (EmptyResultDataAccessException e) {
-					logger.info("Cannot remove item {}, it's not in the customer basket", basketItemId);
+					logger.warn("Cannot remove item {}, it's not in the customer basket", basketItemId);
 				}
 			}
 		}
